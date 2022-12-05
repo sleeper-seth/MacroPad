@@ -3,33 +3,54 @@
 #include <ezButton.h>
 #include "keycodes.h"
 #include "config.h"
+#include "Arduino.h"
+#include <CoopTask.h>
 
+CoopTask<>* taskKeyboard;
+int singlePressedButton = -1;
 
-const int BUTTON_NUM = 9;
+void setup() {
+  Keyboard.begin();
+  // Scheduler.startLoop(loop2);
+  taskKeyboard = createCoopTask(F("Keyboard"), loopKeyboard);
 
-const ezButton buttons[] = {
-	ezButton(21), 
-	ezButton(20), 
-  ezButton(19),
-	ezButton(18), 
-	ezButton(15), 
-	ezButton(14),
-  ezButton(16), 
-	ezButton(10), 
-	ezButton(9), 
-};
+  
+  for(int i=0;i<NUM_BUTTONS;i++){
+    buttons[i].setDebounceTime(50);
+  }
+}
 
-const int pins[] = {
-  21,
-  20,
-  19,
-  18,
-  15,
-  14,
-  16,
-  10,
-  9,
-};
+void loop() {
+  // int [NUM_BUTTONS] pressed;
+
+  for(int i=0;i<NUM_BUTTONS;i++){
+    buttons[i].loop();
+  }
+
+  for (int i=0;i<NUM_BUTTONS;i++){
+    if (buttons[i].isPressed()) {
+      singlePressedButton = i;
+
+    }
+  }
+
+  runCoopTasks();
+
+  yield();
+}
+
+void loopKeyboard() {
+  for (;;) {
+    if (singlePressedButton >= 0) {
+      sendSequenceMac(A_KEYMAP[singlePressedButton]);
+      singlePressedButton = -1;
+    }
+    delay(10);
+  }
+
+  return 0;
+}
+
 
 // A Mac equivalent requires the "Unicode Hex Input" to be enabled,
 // then hold Option, enter the keycode, release Option.
@@ -39,43 +60,6 @@ void sendSequenceMac(String seq){
   Keyboard.print(seq);
   delay(20);
   Keyboard.releaseAll();
-  delay(100);
-  }
-
-// void sendSequenceMac(String seq){
-//   Keyboard.press(KEY_LEFT_CTRL);
-//   Keyboard.press(KEY_LEFT_GUI);
-//   Keyboard.press(' ');
-//   Keyboard.releaseAll();
-//   delay(500);
-//   Keyboard.write('CAT');
-//   Keyboard.press(KEY_DOWN_ARROW);
-//   Keyboard.press(KEY_RETURN);
-//   Keyboard.releaseAll();
-//   delay(500);
-// }
-
-void setup() {
-  Keyboard.begin();
-  for(int i=0;i<BUTTON_NUM;i++){
-    buttons[i].setDebounceTime(50);
-  }
 }
-
-void loop() {
-
-  for(int i=0;i<BUTTON_NUM;i++){
-    buttons[i].loop();
-  }
-
-  for(int i=0;i<BUTTON_NUM;i++){
-    if(buttons[i].isPressed()) {
-      sendSequenceMac(A_KEYMAP[i]);
-      // String numberString = String(pins[i]);
-      // Keyboard.print(numberString);
-    }
-  }
-}
-
 
 

@@ -1,27 +1,52 @@
-/* This file contains all the user-servicable parts for the emoji keyboard.
- * KEYMAP_SIZE specifies the number of buttons in the keyboard
- * KEYMAP is an array of the unicode symbols to be output when the corresponding pin goes low.
- */
-const int KEYMAP_SIZE = 7;
-const String KEYMAP[KEYMAP_SIZE] = {
-  WINK_TONGUE,
-  FROWN,
-  SMILE,
-  PUKE,
-  PILE_OF_POO,
-  BLOW_KISS,
-  BLOW_KISS,
+
+const int NUM_BUTTONS = 9;
+const String KEYMAP[NUM_BUTTONS] = {
+  W_EYES,
+  W_BEER,
+  W_LOVE_FACE,
+  W_FIRE,
+  W_THUMBS_UP,
+  W_100,
+  W_ROFL,
+  W_CHECK,
+  W_ROCKET
 };
 
 /**
  * This is the KEYMAP for Apple. Need because Apple reqiures a different part.
  */
-const String A_KEYMAP[KEYMAP_SIZE] = {
-  A_WINK_TONGUE,
-  A_FROWN,
-  A_SMILE,
-  A_PUKE,
-  A_PILE_OF_POO,
-  A_BLOW_KISS,
-  A_BLOW_KISS
+const String A_KEYMAP[NUM_BUTTONS] = {
+  A_EYES,
+  A_BEER,
+  A_LOVE_FACE,
+  A_FIRE,
+  A_THUMBS_UP,
+  A_100,
+  A_ROFL,
+  A_CHECK,
+  A_ROCKET
+};
+
+const ezButton buttons[NUM_BUTTONS] = {
+	ezButton(21), 
+	ezButton(20), 
+  ezButton(19),
+	ezButton(18), 
+	ezButton(15), 
+	ezButton(14),
+  ezButton(16), 
+	ezButton(10), 
+	ezButton(9), 
+};
+
+const int pins[NUM_BUTTONS] = {
+  21,
+  20,
+  19,
+  18,
+  15,
+  14,
+  16,
+  10,
+  9,
 };
