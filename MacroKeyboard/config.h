@@ -1,10 +1,18 @@
 /*
-  1 2 3
-  4 5 6
-  7 8 9
+  0 1 2  --> Linux mode
+  3 4 5  --> Windows Mode
+  6 7 8  --> Apple Mode
 */
 
 const int NUM_BUTTONS = 9;
+const int MODE_ADDRESS = 22;
+const int KEY_IN_EMOTICON_MODE = 2;
+const int KEY_IN_SERIAL_MODE = 2;
+const int KEY_ADDRESS_START = 30;
+const int APPLE_MODE = 1;
+const int WINDOWS_MODE = 2;
+const int LINUX_MODE = 3;
+const int LONG_PRESS_TIME  = 3000; // milliseconds
 
 // Windows
 String W_KEYMAP[NUM_BUTTONS] = {
@@ -20,7 +28,7 @@ String W_KEYMAP[NUM_BUTTONS] = {
 };
 
 // Apple
-const String A_KEYMAP[NUM_BUTTONS] = {
+String A_KEYMAP[NUM_BUTTONS] = {
   A_EYES,
   A_BEER,
   A_LOVE_FACE,
@@ -32,7 +40,7 @@ const String A_KEYMAP[NUM_BUTTONS] = {
   A_ROCKET
 };
 
-// Pin connections
+// Pin connections on the PCB
 const ezButton buttons[NUM_BUTTONS] = {
 	ezButton(21), 
 	ezButton(20), 

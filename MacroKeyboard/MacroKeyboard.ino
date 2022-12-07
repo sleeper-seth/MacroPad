@@ -5,13 +5,14 @@
 #include "config.h"
 #include "Arduino.h"
 #include <CoopTask.h>
+#include <EEPROM.h>
 
 CoopTask<>* taskKeyboard;
 int singlePressedButton = -1;
+unsigned long pressedTimes[NUM_BUTTONS] = {};
 
 void setup() {
   Keyboard.begin();
-  // Scheduler.startLoop(loop2);
   taskKeyboard = createCoopTask(F("Keyboard"), loopKeyboard);
 
   Serial.begin(9600);
@@ -19,33 +20,85 @@ void setup() {
   for(int i=0;i<NUM_BUTTONS;i++){
     buttons[i].setDebounceTime(50);
   }
-}
+} 
 
 void loop() {
-  // int [NUM_BUTTONS] pressed;
+  bool longPressed[NUM_BUTTONS] = {};
+  bool didRelease = false;
 
+  // Loop buttons
   for(int i=0;i<NUM_BUTTONS;i++){
     buttons[i].loop();
   }
 
-  for (int i=0;i<NUM_BUTTONS;i++){
+  // Check button status
+  for (int i = 0; i < NUM_BUTTONS; i++){
     if (buttons[i].isPressed()) {
       singlePressedButton = i;
+      pressedTimes[i] = millis();
+    }
 
+    if (buttons[i].isReleased()) {
+      didRelease = true;
     }
   }
 
-  runCoopTasks();
+  // Evaluate long press behaviors
+  if (didRelease) {
+    int singleButton = -1;
+    for (int i = 0; i < NUM_BUTTONS; i++){
+      if (pressedTimes[i] > 0 && millis() - pressedTimes[i] > LONG_PRESS_TIME) {
+        longPressed[i] = true;
+        singleButton = i;
+      }
 
+      pressedTimes[i] = 0;
+    }
+
+    if (longPressed[0] && longPressed[1] && longPressed[2]) {
+      EEPROM.update(MODE_ADDRESS, LINUX_MODE);
+              Serial.println("LINUX_MODE");
+
+    } else if (longPressed[3] && longPressed[4] && longPressed[5]) {
+      EEPROM.update(MODE_ADDRESS, WINDOWS_MODE);
+              Serial.println("WINDOWS_MODE");
+
+    } else if (longPressed[6] && longPressed[7] && longPressed[8]) {
+      EEPROM.update(MODE_ADDRESS, APPLE_MODE);
+      Serial.println("APPLE_MODE");
+    } else if (singleButton >= 0) {
+      Serial.print("Single Button: ");
+      Serial.print(singleButton);
+
+      if (EEPROM.read(KEY_ADDRESS_START + singleButton) == KEY_IN_SERIAL_MODE) {
+        EEPROM.update(KEY_ADDRESS_START + singleButton, KEY_IN_EMOTICON_MODE);
+        Serial.println("  -  Setting to Emoticon Mode");
+      } else {
+        EEPROM.update(KEY_ADDRESS_START + singleButton, KEY_IN_SERIAL_MODE);
+        Serial.println(singleButton);
+        Serial.println("  -  Setting to Serial Mode");
+      }
+    }
+  }
+
+
+  // Run threads and give way
+  runCoopTasks();
   yield();
 }
 
 void loopKeyboard() {
   for (;;) {
     if (singlePressedButton >= 0) {
-      // sendSequenceMac(A_KEYMAP[singlePressedButton]);
-      sendSequenceWindows(W_KEYMAP[singlePressedButton]);
-        // Serial.println("wut wut");
+      if (EEPROM.read(KEY_ADDRESS_START + singlePressedButton) == KEY_IN_SERIAL_MODE) {
+        Serial.println("SERIAL_KEY_");
+      } else if (EEPROM.read(MODE_ADDRESS) == WINDOWS_MODE) {
+        sendSequenceWindows(W_KEYMAP[singlePressedButton]);
+      } else if (EEPROM.read(MODE_ADDRESS) == LINUX_MODE) {
+        sendSequenceLinux(W_KEYMAP[singlePressedButton]);
+      } else {
+        sendSequenceMac(A_KEYMAP[singlePressedButton]);
+      }
 
       singlePressedButton = -1;
     }
@@ -57,7 +110,7 @@ void loopKeyboard() {
 
 // A Mac equivalent requires the "Unicode Hex Input" to be enabled,
 // then hold Option, enter the keycode, release Option.
-void sendSequenceMac(String seq){
+void sendSequenceMac(String &seq){
   Keyboard.press(KEY_LEFT_ALT);
   Keyboard.print(seq);
   delay(20);
@@ -69,7 +122,7 @@ void sendSequenceMac(String seq){
  * This implementation is linux-specific, and relies on the code being ctrl+shift+u <keycode> <space>
  * the delay calls are present to prevent overwhelming the host with input.
  */
-void sendSequenceLinux(String seq) {
+void sendSequenceLinux(String &seq) {
   Serial.println(seq);
   Keyboard.press(KEY_LEFT_CTRL);
   Keyboard.press(KEY_LEFT_SHIFT);
