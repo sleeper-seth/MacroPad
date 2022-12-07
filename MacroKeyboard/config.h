@@ -1,6 +1,13 @@
+/*
+  1 2 3
+  4 5 6
+  7 8 9
+*/
 
 const int NUM_BUTTONS = 9;
-const String KEYMAP[NUM_BUTTONS] = {
+
+// Windows
+String W_KEYMAP[NUM_BUTTONS] = {
   W_EYES,
   W_BEER,
   W_LOVE_FACE,
@@ -12,9 +19,7 @@ const String KEYMAP[NUM_BUTTONS] = {
   W_ROCKET
 };
 
-/**
- * This is the KEYMAP for Apple. Need because Apple reqiures a different part.
- */
+// Apple
 const String A_KEYMAP[NUM_BUTTONS] = {
   A_EYES,
   A_BEER,
@@ -27,6 +32,7 @@ const String A_KEYMAP[NUM_BUTTONS] = {
   A_ROCKET
 };
 
+// Pin connections
 const ezButton buttons[NUM_BUTTONS] = {
 	ezButton(21), 
 	ezButton(20), 
@@ -37,16 +43,4 @@ const ezButton buttons[NUM_BUTTONS] = {
   ezButton(16), 
 	ezButton(10), 
 	ezButton(9), 
-};
-
-const int pins[NUM_BUTTONS] = {
-  21,
-  20,
-  19,
-  18,
-  15,
-  14,
-  16,
-  10,
-  9,
 };

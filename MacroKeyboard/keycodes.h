@@ -1,15 +1,24 @@
 // Unicode Key Codes of Interest
 
-// Letters in the below symbols *must* be lowercase to achieve the correct result.
-String W_EYES = "1F440";
-String W_BEER = "1F37A";
-String W_LOVE_FACE = "1F60D";
-String W_FIRE = "1F525";
-String W_THUMBS_UP = "1F44D";
-String W_100 = "1F4AF";
-String W_ROFL = "1F923";
-String W_CHECK = "2705";
-String W_ROCKET = "1F680";
+String U_EYES = "1F440";
+String U_BEER = "1F37A";
+String U_LOVE_FACE = "1F60D";
+String U_FIRE = "1F525";
+String U_THUMBS_UP = "1F44D";
+String U_100 = "1F4AF";
+String U_ROFL = "1F923";
+String U_CHECK = "2705";
+String U_ROCKET = "1F680";
+
+String W_EYES = "eyes";
+String W_BEER = "beer";
+String W_LOVE_FACE = "smiling face with heart";
+String W_FIRE = "fire";
+String W_THUMBS_UP = "thumbs up";
+String W_100 = "100";
+String W_ROFL = "rofl";
+String W_CHECK = "check";
+String W_ROCKET = "rocket";
 
 //This is the apple version of it. Conversions done using https://r12a.github.io/app-conversion/ 
 //Only needs to be done for strings longer than four characters.
