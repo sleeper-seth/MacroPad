@@ -14,7 +14,8 @@ void setup() {
   // Scheduler.startLoop(loop2);
   taskKeyboard = createCoopTask(F("Keyboard"), loopKeyboard);
 
-  
+  Serial.begin(9600);
+
   for(int i=0;i<NUM_BUTTONS;i++){
     buttons[i].setDebounceTime(50);
   }
@@ -42,7 +43,9 @@ void loop() {
 void loopKeyboard() {
   for (;;) {
     if (singlePressedButton >= 0) {
-      sendSequenceMac(A_KEYMAP[singlePressedButton]);
+      // sendSequenceMac(A_KEYMAP[singlePressedButton]);
+        Serial.println("wut wut");
+
       singlePressedButton = -1;
     }
     delay(10);
@@ -51,15 +54,14 @@ void loopKeyboard() {
   return 0;
 }
 
-
 // A Mac equivalent requires the "Unicode Hex Input" to be enabled,
 // then hold Option, enter the keycode, release Option.
-
 void sendSequenceMac(String seq){
   Keyboard.press(KEY_LEFT_ALT);
   Keyboard.print(seq);
   delay(20);
   Keyboard.releaseAll();
+  delay(20);
 }
 
 
