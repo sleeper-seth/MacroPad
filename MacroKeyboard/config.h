@@ -7,7 +7,7 @@
 const int NUM_BUTTONS = 9;
 const int MODE_ADDRESS = 22;
 const int KEY_IN_EMOTICON_MODE = 2;
-const int KEY_IN_SERIAL_MODE = 2;
+const int KEY_IN_SERIAL_MODE = 3;
 const int KEY_ADDRESS_START = 30;
 const int APPLE_MODE = 1;
 const int WINDOWS_MODE = 2;
@@ -38,6 +38,19 @@ String A_KEYMAP[NUM_BUTTONS] = {
   A_ROFL,
   A_CHECK,
   A_ROCKET
+};
+
+// Linux
+String U_KEYMAP[NUM_BUTTONS] = {
+  U_EYES,
+  U_BEER,
+  U_LOVE_FACE,
+  U_FIRE,
+  U_THUMBS_UP,
+  U_100,
+  U_ROFL,
+  U_CHECK,
+  U_ROCKET
 };
 
 // Pin connections on the PCB

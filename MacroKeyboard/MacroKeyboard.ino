@@ -57,30 +57,26 @@ void loop() {
 
     if (longPressed[0] && longPressed[1] && longPressed[2]) {
       EEPROM.update(MODE_ADDRESS, LINUX_MODE);
-              Serial.println("LINUX_MODE");
+      Serial.println("LINUX_MODE");
 
     } else if (longPressed[3] && longPressed[4] && longPressed[5]) {
       EEPROM.update(MODE_ADDRESS, WINDOWS_MODE);
-              Serial.println("WINDOWS_MODE");
+      Serial.println("WINDOWS_MODE");
 
     } else if (longPressed[6] && longPressed[7] && longPressed[8]) {
       EEPROM.update(MODE_ADDRESS, APPLE_MODE);
       Serial.println("APPLE_MODE");
     } else if (singleButton >= 0) {
-      Serial.print("Single Button: ");
-      Serial.print(singleButton);
-
       if (EEPROM.read(KEY_ADDRESS_START + singleButton) == KEY_IN_SERIAL_MODE) {
         EEPROM.update(KEY_ADDRESS_START + singleButton, KEY_IN_EMOTICON_MODE);
-        Serial.println("  -  Setting to Emoticon Mode");
+        Serial.println("Setting to Emoticon Mode");
       } else {
         EEPROM.update(KEY_ADDRESS_START + singleButton, KEY_IN_SERIAL_MODE);
         Serial.println(singleButton);
-        Serial.println("  -  Setting to Serial Mode");
+        Serial.println("Setting to Serial Mode");
       }
     }
   }
-
 
   // Run threads and give way
   runCoopTasks();
@@ -91,11 +87,12 @@ void loopKeyboard() {
   for (;;) {
     if (singlePressedButton >= 0) {
       if (EEPROM.read(KEY_ADDRESS_START + singlePressedButton) == KEY_IN_SERIAL_MODE) {
-        Serial.println("SERIAL_KEY_");
+        // Send single key press event over serial for advanced magic
+        Serial.println(singlePressedButton);
       } else if (EEPROM.read(MODE_ADDRESS) == WINDOWS_MODE) {
         sendSequenceWindows(W_KEYMAP[singlePressedButton]);
       } else if (EEPROM.read(MODE_ADDRESS) == LINUX_MODE) {
-        sendSequenceLinux(W_KEYMAP[singlePressedButton]);
+        sendSequenceLinux(U_KEYMAP[singlePressedButton]);
       } else {
         sendSequenceMac(A_KEYMAP[singlePressedButton]);
       }
@@ -123,7 +120,6 @@ void sendSequenceMac(String &seq){
  * the delay calls are present to prevent overwhelming the host with input.
  */
 void sendSequenceLinux(String &seq) {
-  Serial.println(seq);
   Keyboard.press(KEY_LEFT_CTRL);
   Keyboard.press(KEY_LEFT_SHIFT);
   Keyboard.press('u');
