@@ -55,3 +55,17 @@ In order to program your new MacroPad, there's a few quick steps to get going.
 # Python Client Setup
 
 TBD
+
+# Sources
+
+PCB designed by `40% Keyboards` - [Nein](https://www.40percent.club/2019/04/nein.html)
+
+3D Printed Box inspired by `DPHacks` - [lightroom-macro-pad](https://github.com/camerahacks/lightroom-macro-pad)
+
+Code starter point `Arduino-Emoji-Keyboard` - [Arduino-Emoji-Keyboard](https://github.com/Mottelz/Arduino-Emoji-Keyboard)
+
+SVG2STL conversion tool - https://svg2stl.com/
+
+Emoji SVGs - https://openmoji.org/library/
+
+Keys - [AliExpress] - (https://www.aliexpress.us/item/3256802192387196.html)
