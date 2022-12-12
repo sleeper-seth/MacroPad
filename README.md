@@ -11,6 +11,8 @@ Key Layout
 
 ```
 
+![MacroPads](https://user-images.githubusercontent.com/56604494/207131652-5ca4f412-8de8-4f59-9eeb-9c2aac2f3cc4.jpg)
+
 # Default Behaviors
 
 By default, the pad is set to Mac mode
