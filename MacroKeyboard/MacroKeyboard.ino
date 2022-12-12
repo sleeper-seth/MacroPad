@@ -55,6 +55,7 @@ void loop() {
       pressedTimes[i] = 0;
     }
 
+    // Mode Switch
     if (longPressed[0] && longPressed[1] && longPressed[2]) {
       EEPROM.update(MODE_ADDRESS, LINUX_MODE);
       Serial.println("LINUX_MODE");
@@ -66,13 +67,13 @@ void loop() {
     } else if (longPressed[6] && longPressed[7] && longPressed[8]) {
       EEPROM.update(MODE_ADDRESS, APPLE_MODE);
       Serial.println("APPLE_MODE");
+
     } else if (singleButton >= 0) {
       if (EEPROM.read(KEY_ADDRESS_START + singleButton) == KEY_IN_SERIAL_MODE) {
         EEPROM.update(KEY_ADDRESS_START + singleButton, KEY_IN_EMOTICON_MODE);
         Serial.println("Setting to Emoticon Mode");
       } else {
         EEPROM.update(KEY_ADDRESS_START + singleButton, KEY_IN_SERIAL_MODE);
-        Serial.println(singleButton);
         Serial.println("Setting to Serial Mode");
       }
     }
